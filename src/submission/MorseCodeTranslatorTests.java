@@ -58,4 +58,12 @@ public class MorseCodeTranslatorTests {
         assertEquals(expected, actual);
     }
 
+    @ParameterizedTest
+    @MethodSource("testData")
+    public void testMorseCodeToLetter(String expected, String input){
+        String actual = translator.translateToEnglish(input);
+
+        assertEquals(expected, actual);
+    }
+
 }
