@@ -123,10 +123,17 @@ public class MorseCodeTranslatorTests {
 
         assertEquals(expected, actual);
     }
+
+    //  Design choice: Lowercased input shall be handled the same as uppercased input
+    @ParameterizedTest
+    @MethodSource("testData")
+    public void testLetterToMorseCodeIgnoreCase(String input, String expected){
+        String actual = translator.translateToMorseCode(input.toLowerCase());
+
+        assertEquals(expected, actual);
+    }
+
     /*  To Test
-        Morse -> Eng
-        Flera tecken -> Morse
-        Flera morse -> Eng
         Tomt, whitespace, småbokstäver, konstiga tecken, åäö...
     */
 

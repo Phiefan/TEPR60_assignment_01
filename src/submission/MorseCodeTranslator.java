@@ -20,6 +20,7 @@ public class MorseCodeTranslator {
     public String translateToMorseCode(String str) {
         String r = "";
 
+        str = str.toUpperCase();
         String[] strArray = str.split("");
 
         for (String s : strArray) {
