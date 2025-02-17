@@ -23,8 +23,10 @@ public class MorseCodeTranslator {
         String[] strArray = str.split("");
 
         for (String s : strArray) {
-            r += this.alphabet.get(s);
-            r += " ";
+            if (!s.isBlank()){
+                r += this.alphabet.get(s);
+                r += " ";
+            }
         }
 
         return r.trim();

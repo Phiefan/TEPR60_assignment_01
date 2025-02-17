@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -90,6 +91,16 @@ public class MorseCodeTranslatorTests {
         String expected = "HELLOWORLD";
 
         String actual = translator.translateToEnglish(".... . .-.. .-.. --- .-- --- .-. .-.. -..");
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"HELLO WORLD", "HELLOWORLD"})
+    public void testWordsToMorseCode(String arg){
+        String expected = ".... . .-.. .-.. --- .-- --- .-. .-.. -..";
+
+        String actual = translator.translateToMorseCode(arg);
 
         assertEquals(expected, actual);
     }
