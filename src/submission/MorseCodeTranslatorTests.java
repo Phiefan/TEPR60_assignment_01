@@ -76,4 +76,12 @@ public class MorseCodeTranslatorTests {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testMorseCodeToWord(){
+        String expected = "ENGLISH";
+
+        String actual = translator.translateToEnglish(". -. --. .-.. .. ... ....");
+
+        assertEquals(expected, actual);
+    }
 }

@@ -33,9 +33,13 @@ public class MorseCodeTranslator {
     public String translateToEnglish(String str) {
         String r = "";
 
-        for (String k : this.alphabet.keySet()) {
-            if (this.alphabet.get(k).equals(str)) {
-                r += k;
+        String[] strArray = str.split(" ");
+
+        for (String s : strArray) {
+            for (String k : this.alphabet.keySet()) {
+                if (s.equals(this.alphabet.get(k))) {
+                    r += k;
+                }
             }
         }
 
