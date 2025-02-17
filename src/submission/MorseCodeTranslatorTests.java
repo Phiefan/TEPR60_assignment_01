@@ -1,6 +1,7 @@
 package submission;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -62,6 +63,15 @@ public class MorseCodeTranslatorTests {
     @MethodSource("testData")
     public void testMorseCodeToLetter(String expected, String input){
         String actual = translator.translateToEnglish(input);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWordToMorseCode(){
+        String expected = "-- --- .-. ... .";
+
+        String actual = translator.translateToMorseCode("MORSE");
 
         assertEquals(expected, actual);
     }

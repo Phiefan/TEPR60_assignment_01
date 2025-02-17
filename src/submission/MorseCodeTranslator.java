@@ -18,8 +18,16 @@ public class MorseCodeTranslator {
     }
 
     public String translateToMorseCode(String str) {
-        String r = this.alphabet.get(str);
-        return r;
+        String r = "";
+
+        String[] strArray = str.split("");
+
+        for (String s : strArray) {
+            r += this.alphabet.get(s);
+            r += " ";
+        }
+
+        return r.trim();
     }
 
     public String translateToEnglish(String str) {
@@ -27,7 +35,7 @@ public class MorseCodeTranslator {
 
         for (String k : this.alphabet.keySet()) {
             if (this.alphabet.get(k).equals(str)) {
-                r+=k;
+                r += k;
             }
         }
 
