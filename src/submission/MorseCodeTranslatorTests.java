@@ -104,4 +104,23 @@ public class MorseCodeTranslatorTests {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testMorseCodeToSentence(){
+        String expected = "TRANSLATINGFROMMORSECODETOENGLISH";
+
+        String actual = translator.translateToEnglish("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
+
+        assertEquals(expected, actual);
+    }
+
+
+
+    /*  To Test
+        Morse -> Eng
+        Flera tecken -> Morse
+        Flera morse -> Eng
+        Tomt, whitespace, småbokstäver, konstiga tecken, åäö...
+    */
+
 }
