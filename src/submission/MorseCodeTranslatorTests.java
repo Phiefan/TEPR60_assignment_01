@@ -114,8 +114,15 @@ public class MorseCodeTranslatorTests {
         assertEquals(expected, actual);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"TRANSLATING FROM ENGLISH TO MORSE CODE", "TRANSLATINGFROMENGLISHTOMORSECODE"})
+    public void testSentenceToMorseCode(String arg){
+        String expected = "- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- . -. --. .-.. .. ... .... - --- -- --- .-. ... . -.-. --- -.. .";
 
+        String actual = translator.translateToMorseCode(arg);
 
+        assertEquals(expected, actual);
+    }
     /*  To Test
         Morse -> Eng
         Flera tecken -> Morse
