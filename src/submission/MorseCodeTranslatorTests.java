@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.stream.Stream;
@@ -142,9 +143,9 @@ public class MorseCodeTranslatorTests {
 
     //  Design choice: Lowercased input shall be handled the same as uppercased input
     @ParameterizedTest
-    @MethodSource("testData")
+    @CsvSource(value = {"m:--", "i:..", "a:.-", "t:-", "h:....", "o:---"}, delimiter = ':')
     public void testLetterToMorseCodeIgnoreCase(String input, String expected) {
-        String actual = translator.translateToMorseCode(input.toLowerCase());
+        String actual = translator.translateToMorseCode(input);
 
         assertEquals(expected, actual);
     }
