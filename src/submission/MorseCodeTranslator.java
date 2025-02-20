@@ -17,6 +17,24 @@ public class MorseCodeTranslator {
         }
     }
 
+    public String translate(String str) {
+        String r;
+
+        if (str == null || str.isBlank()){
+            throw new RuntimeException("Input is null or blank");
+        } else if (!this.isEnglish(str) && !this.isMorseCode(str)){
+            throw new RuntimeException("Input is untranslatable");
+        } else {
+            if (this.isMorseCode(str)){
+                r = this.translateToEnglish(str);
+            } else {
+                r = this.translateToMorseCode(str);
+            }
+        }
+
+        return r;
+    }
+
     public String translateToMorseCode(String str) {
         String r = "";
 
@@ -48,4 +66,13 @@ public class MorseCodeTranslator {
 
         return r;
     }
+
+    public boolean isEnglish(String str) {
+        return str.matches("[a-zA-Z\\s]*");
+    }
+
+    public boolean isMorseCode(String str) {
+        return str.matches("[.\\-\\s]*");
+    }
+
 }

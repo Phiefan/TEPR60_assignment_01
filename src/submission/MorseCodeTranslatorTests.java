@@ -6,10 +6,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class MorseCodeTranslatorTests {
@@ -47,14 +49,28 @@ public class MorseCodeTranslatorTests {
         );
     }
 
+    public static Stream<Arguments> ignoreCaseData() {
+        return Stream.of(
+                arguments("only lowercase", "--- -. .-.. -.-- .-.. --- .-- . .-. -.-. .- ... ."),
+                arguments("ONE LeTTER", "--- -. . .-.. . - - . .-."),
+                arguments("MorE tHan OnE", "-- --- .-. . - .... .- -. --- -. ."),
+                arguments("gemener VERSALER", "--. . -- . -. . .-. ...- . .-. ... .- .-.. . .-."),
+                arguments("VERSALER gemener", "...- . .-. ... .- .-.. . .-. --. . -- . -. . .-.")
+        );
+    }
+
+    public static Stream<String> untranslatable() {
+        return Stream.of("-9", "13", "0", "927", "å", "Ä", "Ö", "!", "#", "&", "?", "+", "_");
+    }
+
     @BeforeEach
-    public void init(){
+    public void init() {
         translator = new MorseCodeTranslator();
     }
 
     @ParameterizedTest
     @MethodSource("testData")
-    public void testLetterToMorseCode(String input, String expected){
+    public void testLetterToMorseCode(String input, String expected) {
         String actual = translator.translateToMorseCode(input);
 
         assertEquals(expected, actual);
@@ -62,14 +78,14 @@ public class MorseCodeTranslatorTests {
 
     @ParameterizedTest
     @MethodSource("testData")
-    public void testMorseCodeToLetter(String expected, String input){
+    public void testMorseCodeToLetter(String expected, String input) {
         String actual = translator.translateToEnglish(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWordToMorseCode(){
+    public void testWordToMorseCode() {
         String expected = "-- --- .-. ... .";
 
         String actual = translator.translateToMorseCode("MORSE");
@@ -78,7 +94,7 @@ public class MorseCodeTranslatorTests {
     }
 
     @Test
-    public void testMorseCodeToWord(){
+    public void testMorseCodeToWord() {
         String expected = "ENGLISH";
 
         String actual = translator.translateToEnglish(". -. --. .-.. .. ... ....");
@@ -87,7 +103,7 @@ public class MorseCodeTranslatorTests {
     }
 
     @Test
-    public void testMorseCodeToWords(){
+    public void testMorseCodeToWords() {
         String expected = "HELLOWORLD";
 
         String actual = translator.translateToEnglish(".... . .-.. .-.. --- .-- --- .-. .-.. -..");
@@ -97,7 +113,7 @@ public class MorseCodeTranslatorTests {
 
     @ParameterizedTest
     @ValueSource(strings = {"HELLO WORLD", "HELLOWORLD"})
-    public void testWordsToMorseCode(String arg){
+    public void testWordsToMorseCode(String arg) {
         String expected = ".... . .-.. .-.. --- .-- --- .-. .-.. -..";
 
         String actual = translator.translateToMorseCode(arg);
@@ -106,7 +122,7 @@ public class MorseCodeTranslatorTests {
     }
 
     @Test
-    public void testMorseCodeToSentence(){
+    public void testMorseCodeToSentence() {
         String expected = "TRANSLATINGFROMMORSECODETOENGLISH";
 
         String actual = translator.translateToEnglish("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
@@ -116,7 +132,7 @@ public class MorseCodeTranslatorTests {
 
     @ParameterizedTest
     @ValueSource(strings = {"TRANSLATING FROM ENGLISH TO MORSE CODE", "TRANSLATINGFROMENGLISHTOMORSECODE"})
-    public void testSentenceToMorseCode(String arg){
+    public void testSentenceToMorseCode(String arg) {
         String expected = "- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- . -. --. .-.. .. ... .... - --- -- --- .-. ... . -.-. --- -.. .";
 
         String actual = translator.translateToMorseCode(arg);
@@ -127,14 +143,103 @@ public class MorseCodeTranslatorTests {
     //  Design choice: Lowercased input shall be handled the same as uppercased input
     @ParameterizedTest
     @MethodSource("testData")
-    public void testLetterToMorseCodeIgnoreCase(String input, String expected){
+    public void testLetterToMorseCodeIgnoreCase(String input, String expected) {
         String actual = translator.translateToMorseCode(input.toLowerCase());
 
         assertEquals(expected, actual);
     }
 
-    /*  To Test
-        Tomt, whitespace, småbokstäver, konstiga tecken, åäö...
-    */
+    @ParameterizedTest
+    @MethodSource("ignoreCaseData")
+    public void testTranslateToMorseCodeIgnoreCase(String input, String expected) {
+        String actual = translator.translateToMorseCode(input);
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"E", "t", "english", "A sentence in English"})
+    public void testIsEnglish(String arg) {
+        boolean expected = true;
+
+        boolean actual = translator.isEnglish(arg);
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {".", "-", "-- --- .-. ... .", "... . -. - . -. -.-. . --- ..-. -- --- .-. ... . -.-. --- -.. ."})
+    public void testNotEnglish(String arg) {
+        boolean expected = false;
+
+        boolean actual = translator.isEnglish(arg);
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {".", "-", "-- --- .-. ... .", "... . -. - . -. -.-. . --- ..-. -- --- .-. ... . -.-. --- -.. ."})
+    public void testIsMorseCode(String arg) {
+        boolean expected = true;
+
+        boolean actual = translator.isMorseCode(arg);
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"E", "t", "english", "A sentence in English"})
+    public void testNotMorseCode(String arg) {
+        boolean expected = false;
+
+        boolean actual = translator.isMorseCode(arg);
+
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"TRANSLATING FROM ENGLISH TO MORSE CODE", "TRANSLATINGFROMENGLISHTOMORSECODE"})
+    public void testTranslateToMorseCode(String arg) {
+        String expected = "- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- . -. --. .-.. .. ... .... - --- -- --- .-. ... . -.-. --- -.. .";
+
+        String actual = translator.translate(arg);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testTranslateToEnglish() {
+        String expected = "TRANSLATINGFROMMORSECODETOENGLISH";
+
+        String actual = translator.translate("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
+
+        assertEquals(expected, actual);
+    }
+
+    // Design choice: Exception when input is neither English nor Morse Code
+    // Implementation fail: can not achieve case where input is both English and Morse Code
+    @ParameterizedTest
+    @MethodSource("untranslatable")
+    @ValueSource(strings = {"Shall.", "- NOT", "-work.", "Hello .-- --- .-. .-.. -..", ".... . .-.. .-.. --- World"})
+    public void testExceptionNotEnglishOrMorseCode(String arg) {
+        Exception exception = assertThrows(RuntimeException.class, () -> translator.translate(arg));
+
+        String expectedMsg = "Input is untranslatable";
+        String actualMsg = exception.getMessage();
+
+        assertEquals(expectedMsg, actualMsg);
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "   ", "\t", "\n"})
+    public void testExceptionNullOrBlank(String arg) {
+        Exception exception = assertThrows(RuntimeException.class, () -> translator.translate(arg));
+
+        String expectedMsg = "Input is null or blank";
+        String actualMsg = exception.getMessage();
+
+        assertEquals(expectedMsg, actualMsg);
+    }
 
 }
