@@ -72,7 +72,7 @@ public class MorseCodeTranslatorTests {
     @ParameterizedTest
     @MethodSource("testData")
     public void testLetterToMorseCode(String input, String expected) {
-        String actual = translator.translateToMorseCode(input);
+        String actual = translator.translate(input);
 
         assertEquals(expected, actual);
     }
@@ -80,7 +80,7 @@ public class MorseCodeTranslatorTests {
     @ParameterizedTest
     @MethodSource("testData")
     public void testMorseCodeToLetter(String expected, String input) {
-        String actual = translator.translateToEnglish(input);
+        String actual = translator.translate(input);
 
         assertEquals(expected, actual);
     }
@@ -89,7 +89,7 @@ public class MorseCodeTranslatorTests {
     public void testWordToMorseCode() {
         String expected = "-- --- .-. ... .";
 
-        String actual = translator.translateToMorseCode("MORSE");
+        String actual = translator.translate("MORSE");
 
         assertEquals(expected, actual);
     }
@@ -98,7 +98,7 @@ public class MorseCodeTranslatorTests {
     public void testMorseCodeToWord() {
         String expected = "ENGLISH";
 
-        String actual = translator.translateToEnglish(". -. --. .-.. .. ... ....");
+        String actual = translator.translate(". -. --. .-.. .. ... ....");
 
         assertEquals(expected, actual);
     }
@@ -107,7 +107,7 @@ public class MorseCodeTranslatorTests {
     public void testMorseCodeToWords() {
         String expected = "HELLOWORLD";
 
-        String actual = translator.translateToEnglish(".... . .-.. .-.. --- .-- --- .-. .-.. -..");
+        String actual = translator.translate(".... . .-.. .-.. --- .-- --- .-. .-.. -..");
 
         assertEquals(expected, actual);
     }
@@ -117,7 +117,7 @@ public class MorseCodeTranslatorTests {
     public void testWordsToMorseCode(String arg) {
         String expected = ".... . .-.. .-.. --- .-- --- .-. .-.. -..";
 
-        String actual = translator.translateToMorseCode(arg);
+        String actual = translator.translate(arg);
 
         assertEquals(expected, actual);
     }
@@ -126,7 +126,7 @@ public class MorseCodeTranslatorTests {
     public void testMorseCodeToSentence() {
         String expected = "TRANSLATINGFROMMORSECODETOENGLISH";
 
-        String actual = translator.translateToEnglish("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
+        String actual = translator.translate("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
 
         assertEquals(expected, actual);
     }
@@ -136,7 +136,7 @@ public class MorseCodeTranslatorTests {
     public void testSentenceToMorseCode(String arg) {
         String expected = "- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- . -. --. .-.. .. ... .... - --- -- --- .-. ... . -.-. --- -.. .";
 
-        String actual = translator.translateToMorseCode(arg);
+        String actual = translator.translate(arg);
 
         assertEquals(expected, actual);
     }
@@ -145,7 +145,7 @@ public class MorseCodeTranslatorTests {
     @ParameterizedTest
     @CsvSource(value = {"m:--", "i:..", "a:.-", "t:-", "h:....", "o:---"}, delimiter = ':')
     public void testLetterToMorseCodeIgnoreCase(String input, String expected) {
-        String actual = translator.translateToMorseCode(input);
+        String actual = translator.translate(input);
 
         assertEquals(expected, actual);
     }
@@ -153,7 +153,7 @@ public class MorseCodeTranslatorTests {
     @ParameterizedTest
     @MethodSource("ignoreCaseData")
     public void testTranslateToMorseCodeIgnoreCase(String input, String expected) {
-        String actual = translator.translateToMorseCode(input);
+        String actual = translator.translate(input);
 
         assertEquals(expected, actual);
     }
@@ -194,25 +194,6 @@ public class MorseCodeTranslatorTests {
         boolean expected = false;
 
         boolean actual = translator.isMorseCode(arg);
-
-        assertEquals(expected, actual);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"TRANSLATING FROM ENGLISH TO MORSE CODE", "TRANSLATINGFROMENGLISHTOMORSECODE"})
-    public void testTranslateToMorseCode(String arg) {
-        String expected = "- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- . -. --. .-.. .. ... .... - --- -- --- .-. ... . -.-. --- -.. .";
-
-        String actual = translator.translate(arg);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testTranslateToEnglish() {
-        String expected = "TRANSLATINGFROMMORSECODETOENGLISH";
-
-        String actual = translator.translate("- .-. .- -. ... .-.. .- - .. -. --. ..-. .-. --- -- -- --- .-. ... . -.-. --- -.. . - --- . -. --. .-.. .. ... ....");
 
         assertEquals(expected, actual);
     }

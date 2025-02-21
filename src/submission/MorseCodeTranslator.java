@@ -1,24 +1,18 @@
 package submission;
 
-import java.util.HashMap;
-
 public class MorseCodeTranslator {
 
-    private final HashMap<String, String> alphabet;
+    private final String[] english;
+    private final String[] morseCode;
 
     public MorseCodeTranslator() {
-        String[] english = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-        String[] morseCode = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
-
-        this.alphabet = new HashMap<>();
-
-        for (int i = 0; i < 26; i++) {
-            this.alphabet.put(english[i], morseCode[i]);
-        }
+        this.english = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        this.morseCode = new String[]{".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
     }
 
     public String translate(String str) {
-        String r;
+        String r = "";
+        String[] strArray;
 
         if (str == null || str.isBlank()){
             throw new RuntimeException("Input is null or blank");
@@ -26,45 +20,27 @@ public class MorseCodeTranslator {
             throw new RuntimeException("Input is untranslatable");
         } else {
             if (this.isMorseCode(str)){
-                r = this.translateToEnglish(str);
+                strArray = str.split(" ");
             } else {
-                r = this.translateToMorseCode(str);
+                str = str.toUpperCase();
+                str = str.replace(" ","");
+
+                strArray = str.split("");
             }
-        }
 
-        return r;
-    }
-
-    public String translateToMorseCode(String str) {
-        String r = "";
-
-        str = str.toUpperCase();
-        String[] strArray = str.split("");
-
-        for (String s : strArray) {
-            if (!s.isBlank()){
-                r += this.alphabet.get(s);
-                r += " ";
-            }
-        }
-
-        return r.trim();
-    }
-
-    public String translateToEnglish(String str) {
-        String r = "";
-
-        String[] strArray = str.split(" ");
-
-        for (String s : strArray) {
-            for (String k : this.alphabet.keySet()) {
-                if (s.equals(this.alphabet.get(k))) {
-                    r += k;
+            for (String s : strArray) {
+                for (int i = 0; i < 26; i++) {
+                    if (this.english[i].equals(s)){
+                        r += this.morseCode[i];
+                        r += " ";
+                    } else if (this.morseCode[i].equals(s)) {
+                        r += this.english[i];
+                    }
                 }
             }
         }
 
-        return r;
+        return r.trim();
     }
 
     public boolean isEnglish(String str) {
