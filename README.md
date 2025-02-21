@@ -13,6 +13,7 @@ a user can do that goes beyond the usage of the system.
 
 The program is implemented for translation of international Morse Code to the letters A to Z, and vice vera.
 Short signals are represented by period (.) and long signals by hyphen (-), for instance F = ..-.
+
 The program handles translation of multiple letter, but seperation of words is not a requirement.
 
 .... . .-.. .-.. --- .----- .-. .-.. -..  = HELLOWORLD
