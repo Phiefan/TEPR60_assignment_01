@@ -7,17 +7,25 @@ public class TranslatorMain {
         Scanner scan = new Scanner(System.in);
         MorseCodeTranslator translator = new MorseCodeTranslator();
 
-        try {
-            System.out.print("Enter something to translate: ");
-            String toTranslate = scan.nextLine();
+        boolean run = true;
+        while (run){
+            try {
+                System.out.print("Enter something to translate: ");
+                String input = scan.nextLine();
 
-            String translated = translator.translate(toTranslate);
+                if (input.equalsIgnoreCase("stop program")){
+                    run = false;
+                } else {
+                    String output = translator.translate(input);
 
-            System.out.println(toTranslate + " -> " + translated);
+                    System.out.println(input + " -> " + output);
+                }
 
-        } catch (Exception e) {
-            System.out.println("Error! " + e.getClass().getSimpleName() + ": " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error! " + e.getClass().getSimpleName() + ": " + e.getMessage());
+            }
         }
 
+        scan.close();
     }
 }
