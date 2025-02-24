@@ -68,11 +68,11 @@ public class MorseCodeTranslator {
     }
 
     public boolean isEnglish(String str) {
-        return str.matches("[a-zA-Z\\s]*");
+        return str.matches("[a-zA-Z\\s]+");
     }
 
     public boolean isMorseCode(String str) {
-        return str.matches("[.\\-\\s]*");
+        return str.matches("[.\\-\\s]+");
     }
 
 }
